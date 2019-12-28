@@ -11,6 +11,27 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
+    Route::get('/', function () {
+        return redirect(app()->getLocale());
+    });
+    Route::get('/fr', function () {
+        return view('welcome');
+    })->name('fr.home');
+    Route::group(['prefix' => '{locale}' ,'where' => ['locale' => '[a-zA-Z]{2}'], 'middleware' => 'setlocale'], function() {
+        
+        Route::get('/', function () {
+            return view('welcome');
+        });
+        
+        Auth::routes();
+        
+        Route::get('/home', 'HomeController@index')->name('home');
+        Auth::routes();
+    });
+
+
+
+//Route::get('/home', 'HomeController@index')->name('home');
